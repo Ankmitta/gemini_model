@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page Title</title>
+  </head>
+  <style>
+    .gemini {
+      position: absolute;
+      left: 47%;
+      font-weight: bold;
+      width: 20%;
+      font-size: large;
+    }
+    input {
+      width: 20%;
+      height: 5%;
+      position: absolute;
+      left: 40%;
+      right: 50%;
+      background-color: beige;
+      border-radius: 8px;
+      margin: 3rem;
+    }
+    button {
+      position: absolute;
+      border-radius: 4px;
+      left: 48%;
+      margin-top: 6rem;
+      background-color: antiquewhite;
+    }
+    #output {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+  </style>
+  <body>
+    <div>
+      <div class="gemini">Welcome to Gemini Model!!</div>
+      <br />
+      <input
+        id="prompt"
+        type="text"
+        placeholder="Please enter your question"
+        value=""
+      />
+      <br /><br />
+      <button type="submit" id="btn">Submit</button>
+      <div id="output">
+        <!-- Placeholder for the generated text -->
+      </div>
+    </div>
+  </body>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+  </script>
+  <script type="module">
+    import { GoogleGenerativeAI } from "@google/generative-ai";
+    const API_KEY = "AIzaSyBd9SzvOHHTz-UISsIqE9JlQzUET2bLips";
+    // Reminder: This should only be for local testing
+    const genAI = new GoogleGenerativeAI(API_KEY);
+
+    let myprompt = "";
+    document.getElementById("btn").addEventListener("click", () => {
+      myprompt = document.getElementById("prompt").value;
+      console.log("prompt", myprompt);
+      async function run() {
+        // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const result = await model.generateContent(myprompt);
+        const response = await result.response;
+        const generatedtext = response.text();
+        console.log(generatedtext);
+        document.getElementById("output").innerHTML = `
+          <p><strong>Generated Response:</strong></p>
+          <p>${generatedtext}</p>
+        `;
+      }
+
+      run();
+    });
+
+    // Fetch your API_KEY
+  </script>
+</html>
